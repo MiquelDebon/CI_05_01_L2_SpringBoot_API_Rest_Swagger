@@ -31,6 +31,7 @@ public class FlowerServiceImp implements IFlowerService{
         Optional<Flower> optional = repository.findById(id);
         if(optional.isPresent()){
             FlowerDTO dto = flowerToDTO(optional.get());
+            LOG.info(String.format("Flower '%d' EXIST",id));
             return Optional.of(dto);
         }else{
             LOG.warn(String.format("Flower '%d' NO EXIST",id));
@@ -39,9 +40,13 @@ public class FlowerServiceImp implements IFlowerService{
     }
     @Override
     public List<FlowerDTO> getAll() {
-        return repository.findAll().stream()
-                .map(x -> flowerToDTO(x))
-                .collect(Collectors.toList());
+        if(repository.findAll().size()>0){
+            return repository.findAll().stream()
+                    .map(x -> flowerToDTO(x))
+                    .collect(Collectors.toList());
+        }else{
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
     @Override
     public void delete(int id) {
