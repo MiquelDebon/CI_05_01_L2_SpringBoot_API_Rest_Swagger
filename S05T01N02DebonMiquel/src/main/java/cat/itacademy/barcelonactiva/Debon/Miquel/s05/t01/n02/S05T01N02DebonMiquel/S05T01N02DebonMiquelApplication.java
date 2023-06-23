@@ -1,10 +1,14 @@
 package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class S05T01N02DebonMiquelApplication {
+@OpenAPIDefinition(info = @Info(title = "API Rest Swagger"))
+public class  S05T01N02DebonMiquelApplication {
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(S05T01N02DebonMiquelApplication.class, args);

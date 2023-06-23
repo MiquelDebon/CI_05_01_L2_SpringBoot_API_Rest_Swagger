@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor // IMPORTANT!!
+@NoArgsConstructor
 public class Flower {
     @Id()
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     @Column(name="id", unique = true)
     private int pk_FlorID;

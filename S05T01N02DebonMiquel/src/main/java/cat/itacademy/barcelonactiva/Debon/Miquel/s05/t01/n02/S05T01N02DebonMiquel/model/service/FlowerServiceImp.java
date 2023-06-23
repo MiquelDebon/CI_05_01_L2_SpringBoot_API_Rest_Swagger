@@ -4,6 +4,7 @@ import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMique
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.domainEntity.Flower;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.repository.FlowerRepository;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class FlowerServiceImp implements IFlowerService{
     @Autowired
     private FlowerRepository repository;
 
-    static Logger LOG;
+    static Logger LOG = LoggerFactory.getLogger(FlowerServiceImp.class);
 
     @Override
     public boolean existFlowerById(int id) {
@@ -33,7 +34,7 @@ public class FlowerServiceImp implements IFlowerService{
             return Optional.of(dto);
         }else{
             LOG.warn(String.format("Flower '%d' NO EXIST",id));
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Flower '%d' NO EXIST",id));
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
     @Override
