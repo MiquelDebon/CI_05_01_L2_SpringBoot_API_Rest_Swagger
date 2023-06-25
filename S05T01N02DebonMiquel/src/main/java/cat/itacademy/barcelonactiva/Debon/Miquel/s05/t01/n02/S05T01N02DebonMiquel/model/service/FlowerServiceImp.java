@@ -30,7 +30,7 @@ public class FlowerServiceImp implements IFlowerService{
     public Optional<FlowerDTO> getOne(int id) {
         Optional<Flower> optional = repository.findById(id);
         if(optional.isPresent()){
-            FlowerDTO dto = flowerToDTO(optional.get());
+            FlowerDTO dto = DTOfromFlower(optional.get());
             LOG.info(String.format("Flower '%d' EXIST",id));
             return Optional.of(dto);
         }else{
@@ -42,7 +42,7 @@ public class FlowerServiceImp implements IFlowerService{
     public List<FlowerDTO> getAll() {
         if(repository.findAll().size()>0){
             return repository.findAll().stream()
-                    .map(x -> flowerToDTO(x))
+                    .map(x -> DTOfromFlower(x))
                     .collect(Collectors.toList());
         }else{
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -59,17 +59,34 @@ public class FlowerServiceImp implements IFlowerService{
         }
     }
     @Override
-    public void save(Flower flower) {
+    public void save(FlowerDTO dto) {
+        Flower flower = flowerFromDTOSave(dto);
+        repository.save(flower);
+    }
+    @Override
+    public void update(FlowerDTO dto) {
+        Flower flower = flowerFromDTOUpdate(dto);
         repository.save(flower);
     }
 
 
+
+
     /**
      *
+     * @param flower
+     * @return DTO
      */
 
-    private FlowerDTO flowerToDTO(Flower flower){
-        return new FlowerDTO(flower.getPk_FlorID(), flower.getNomFlor(), flower.getPaisFlor());
+    private FlowerDTO DTOfromFlower(Flower flower){
+        return new FlowerDTO(flower.getPk_FlorID() ,flower.getNomFlor(), flower.getPaisFlor());
+    }
+
+    private Flower flowerFromDTOSave(FlowerDTO dto){
+        return new Flower(dto.getName(), dto.getCountry());
+    }
+    private Flower flowerFromDTOUpdate(FlowerDTO dto){
+        return new Flower(dto.getId(), dto.getName(), dto.getCountry());
     }
 
 }

@@ -3,6 +3,7 @@ package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiqu
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTO;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.domainEntity.Flower;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.service.FlowerServiceImp;
+import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.service.IFlowerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,14 +29,14 @@ import java.util.Optional;
 public class FlowerController {
 
     @Autowired
-    private  FlowerServiceImp flowerService;
+    private IFlowerService flowerService;
 
     //http://localhost:9001/v3/api-docs
     //http://localhost:9001/swagger-ui/index.html
 
     static Logger LOG = LoggerFactory.getLogger(FlowerServiceImp.class);
 
-    @PutMapping("/add")
+    @PostMapping("/add")
     @Operation(
             tags = "IT-Academy",
             summary = "SAVE one flower",
@@ -43,7 +44,7 @@ public class FlowerController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "Expected a Flower JSON",
-                    content = @Content(schema = @Schema(implementation = Flower.class))),
+                    content = @Content(schema = @Schema(implementation = FlowerDTO.class))),
             //TODO: NO estoy exponiendo usuarios demasiado?
             responses = {
                     @ApiResponse(
@@ -59,10 +60,10 @@ public class FlowerController {
                     )
             }
     )
-    public ResponseEntity<?> add(@Valid @RequestBody Flower flower){
+    public ResponseEntity<?> add(@Valid @RequestBody FlowerDTO dto){
         LOG.info("Controller - Saving method");
         try{
-            flowerService.save(flower);
+            flowerService.save(dto);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Not valid Flower",HttpStatus.BAD_REQUEST);
@@ -76,7 +77,7 @@ public class FlowerController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "Expected a Flower JSON",
-                    content = @Content(schema = @Schema(implementation = Flower.class))
+                    content = @Content(schema = @Schema(implementation = FlowerDTO.class))
             ),
             responses = {
                     @ApiResponse(
@@ -90,10 +91,10 @@ public class FlowerController {
             }
 
     )
-    public ResponseEntity<?> update(@RequestBody Flower flower){
+    public ResponseEntity<?> update(@RequestBody FlowerDTO dto){
         LOG.info("Controller - Updating method");
         try{
-            flowerService.save(flower);
+            flowerService.update(dto);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Not valid Flower",HttpStatus.BAD_REQUEST);

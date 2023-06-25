@@ -11,6 +11,7 @@ public interface IFlowerService {
     Optional<FlowerDTO> getOne(int id);
     List<FlowerDTO> getAll();
     void delete(int id);
-    void save(Flower flower);
+    void save(FlowerDTO dto);
+    void update(FlowerDTO dto);
 
 }
