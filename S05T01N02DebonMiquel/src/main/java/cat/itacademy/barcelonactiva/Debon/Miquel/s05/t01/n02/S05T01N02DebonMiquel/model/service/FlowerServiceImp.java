@@ -50,7 +50,13 @@ public class FlowerServiceImp implements IFlowerService{
     }
     @Override
     public void delete(int id) {
-        repository.deleteById(id);
+        if(repository.existsById(id)){
+            LOG.info("Service - Everything alright");
+            repository.deleteById(id);
+        }else{
+            LOG.warn("Service - DOES NOT Exist this ID");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
     @Override
     public void save(Flower flower) {
