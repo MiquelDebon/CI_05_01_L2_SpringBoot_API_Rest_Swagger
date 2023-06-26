@@ -4,7 +4,7 @@
 Open API - Swagger 
 
 All methods
-![All methods](S05T01N02DebonMiquel/src/main/resources/static/images/allMethods.png)
+![All methods](S05T01N02DebonMiquel/src/main/resources/static/images/allMethodss.png)
 
 - Save
 ![save](S05T01N02DebonMiquel/src/main/resources/static/images/save.png)
