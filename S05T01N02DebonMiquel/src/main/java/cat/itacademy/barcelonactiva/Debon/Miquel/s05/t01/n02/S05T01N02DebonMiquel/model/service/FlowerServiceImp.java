@@ -1,6 +1,7 @@
 package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.service;
 
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTO;
+import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTOReturn;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.domainEntity.Flower;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.repository.FlowerRepository;
 import org.slf4j.Logger;
@@ -31,11 +32,11 @@ public class FlowerServiceImp implements IFlowerService{
         Optional<Flower> optional = repository.findById(id);
         if(optional.isPresent()){
             FlowerDTO dto = DTOfromFlower(optional.get());
-            LOG.info(String.format("Flower '%d' EXIST",id));
+            LOG.info(String.format("Service - Flower '%d' EXIST",id));
             return Optional.of(dto);
         }else{
-            LOG.warn(String.format("Flower '%d' NO EXIST",id));
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            LOG.warn(String.format("Service - Flower '%d' DO NOT exist",id));
+            throw new RuntimeException();
         }
     }
     @Override
@@ -45,28 +46,36 @@ public class FlowerServiceImp implements IFlowerService{
                     .map(x -> DTOfromFlower(x))
                     .collect(Collectors.toList());
         }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            LOG.warn(String.format("Service - There are NO Flowers"));
+            throw new RuntimeException();
         }
     }
     @Override
     public void delete(int id) {
         if(repository.existsById(id)){
-            LOG.info("Service - Everything alright");
+            LOG.info(String.format("Service - Flower '%d' EXIST to Delete",id));
             repository.deleteById(id);
         }else{
-            LOG.warn("Service - DOES NOT Exist this ID");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            LOG.warn(String.format("Service - Flower '%d' DO NOT exist",id));
+            throw new RuntimeException();
         }
     }
+
     @Override
-    public void save(FlowerDTO dto) {
+    public FlowerDTOReturn save(FlowerDTO dto) {
+        FlowerDTO flowerDTO = new FlowerDTO(dto.getName(), dto.getCountry());
         Flower flower = flowerFromDTOSave(dto);
         repository.save(flower);
+        //Otherwise throw an exception
+        return new FlowerDTOReturn(flowerDTO.getName(), flowerDTO.getCountry(), flowerDTO.getEurope());
     }
+
+
     @Override
     public void update(FlowerDTO dto) {
         Flower flower = flowerFromDTOUpdate(dto);
         repository.save(flower);
+        //Otherwise throw an exception
     }
 
 

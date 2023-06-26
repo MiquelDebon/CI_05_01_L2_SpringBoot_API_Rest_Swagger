@@ -1,26 +1,20 @@
 package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
 
-public class FlowerReturn {
-
-    @NotEmpty(message = "Name is mandatory")
+@Data
+public class FlowerDTOReturn {
     @Schema(defaultValue = "Rose", description = "Flower's Name")
     private String name;
-    @NotEmpty(message = "Country is mandatory")
     @Schema(defaultValue = "Spain", description = "Flower's Country")
     private String country;
-
-    @Schema(hidden = true)
+    @Schema(defaultValue = "EU / No EU", description = "Flower is from Europe?")
     private String europe;
 
-    public FlowerDTO( String name, String country){
+    public FlowerDTOReturn( String name, String country, String europe){
         this.name = name;
         this.country = country;
-        this.europe = UECountries.UEcountriesList.stream()
-                .map(String::toLowerCase)
-                .anyMatch(country.toLowerCase()::contains) ? "UE" : "Fora UE";
+        this.europe = europe;
     }
 }

@@ -1,6 +1,7 @@
 package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.service;
 
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTO;
+import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTOReturn;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.domainEntity.Flower;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface IFlowerService {
     Optional<FlowerDTO> getOne(int id);
     List<FlowerDTO> getAll();
     void delete(int id);
-    void save(FlowerDTO dto);
+    FlowerDTOReturn save(FlowerDTO dto);
     void update(FlowerDTO dto);
 
 }

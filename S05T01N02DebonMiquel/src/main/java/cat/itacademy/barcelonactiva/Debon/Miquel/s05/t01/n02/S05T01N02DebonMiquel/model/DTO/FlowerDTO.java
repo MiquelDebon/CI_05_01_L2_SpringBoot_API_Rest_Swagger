@@ -1,11 +1,8 @@
 package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,18 +14,19 @@ public class FlowerDTO {
     private int id;
 
     @NotEmpty(message = "Name is mandatory")
-    @Schema(defaultValue = "MiquelFlower", description = "Name of the Flower")
+    @Schema(defaultValue = "Rose", description = "Flower's Name")
     private String name;
     @NotEmpty(message = "Country is mandatory")
-    @Schema(defaultValue = "Spain")
+    @Schema(defaultValue = "Spain", description = "Flower's Country")
     private String country;
-    @Schema()
-    private String Europe;
+
+    @Schema(hidden = true)
+    private String europe;
 
     public FlowerDTO( String name, String country){
         this.name = name;
         this.country = country;
-        this.Europe = UECountries.UEcountriesList.stream()
+        this.europe = UECountries.UEcountriesList.stream()
                 .map(String::toLowerCase)
                 .anyMatch(country.toLowerCase()::contains) ? "UE" : "Fora UE";
     }
@@ -36,7 +34,7 @@ public class FlowerDTO {
         this.id = id;
         this.name = name;
         this.country = country;
-        this.Europe = UECountries.UEcountriesList.stream()
+        this.europe = UECountries.UEcountriesList.stream()
                 .map(String::toLowerCase)
                 .anyMatch(country.toLowerCase()::contains) ? "UE" : "Fora UE";
     }
