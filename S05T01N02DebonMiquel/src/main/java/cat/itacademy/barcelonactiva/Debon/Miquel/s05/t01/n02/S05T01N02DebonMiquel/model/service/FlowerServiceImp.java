@@ -18,17 +18,19 @@ import java.util.stream.Collectors;
 @Service
 public class FlowerServiceImp implements IFlowerService{
 
+
     @Autowired
     private FlowerRepository repository;
-
     static Logger LOG = LoggerFactory.getLogger(FlowerServiceImp.class);
+
 
     @Override
     public boolean existFlowerById(int id) {
         return repository.existsById(id);
     }
+
     @Override
-    public Optional<FlowerDTO> getOne(int id) {
+    public Optional<FlowerDTO> getOne(int id) throws RuntimeException {
         Optional<Flower> optional = repository.findById(id);
         if(optional.isPresent()){
             FlowerDTO dto = DTOfromFlower(optional.get());
@@ -39,8 +41,9 @@ public class FlowerServiceImp implements IFlowerService{
             throw new RuntimeException();
         }
     }
+
     @Override
-    public List<FlowerDTO> getAll() {
+    public List<FlowerDTO> getAll() throws RuntimeException {
         if(repository.findAll().size()>0){
             return repository.findAll().stream()
                     .map(x -> DTOfromFlower(x))
@@ -50,8 +53,9 @@ public class FlowerServiceImp implements IFlowerService{
             throw new RuntimeException();
         }
     }
+
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws RuntimeException {
         if(repository.existsById(id)){
             LOG.info(String.format("Service - Flower '%d' EXIST to Delete",id));
             repository.deleteById(id);
@@ -62,7 +66,7 @@ public class FlowerServiceImp implements IFlowerService{
     }
 
     @Override
-    public FlowerDTOReturn save(FlowerDTO dto) {
+    public FlowerDTOReturn save(FlowerDTO dto)  throws RuntimeException {
         FlowerDTO flowerDTO = new FlowerDTO(dto.getName(), dto.getCountry());
         Flower flower = flowerFromDTOSave(dto);
         repository.save(flower);
@@ -70,14 +74,12 @@ public class FlowerServiceImp implements IFlowerService{
         return new FlowerDTOReturn(flowerDTO.getName(), flowerDTO.getCountry(), flowerDTO.getEurope());
     }
 
-
     @Override
     public void update(FlowerDTO dto) {
         Flower flower = flowerFromDTOUpdate(dto);
         repository.save(flower);
         //Otherwise throw an exception
     }
-
 
 
 

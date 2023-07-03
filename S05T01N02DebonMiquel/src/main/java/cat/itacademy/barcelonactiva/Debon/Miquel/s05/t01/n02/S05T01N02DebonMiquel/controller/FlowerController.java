@@ -3,7 +3,6 @@ package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiqu
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTO;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTOReturn;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTOSchemaUpdate;
-import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.service.FlowerServiceImp;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.service.IFlowerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,13 +28,15 @@ import java.util.concurrent.Flow;
 @RequestMapping("/flower")
 public class FlowerController {
 
+    //TODO Entity Pattern!
+
     @Autowired
     private IFlowerService flowerService;
 
     //http://localhost:9001/v3/api-docs
     //http://localhost:9001/swagger-ui/index.html
 
-    static Logger LOG = LoggerFactory.getLogger(FlowerServiceImp.class);
+    static Logger LOG = LoggerFactory.getLogger(FlowerController.class);
 
     @PostMapping("/add")
     @Operation(
@@ -62,13 +63,12 @@ public class FlowerController {
                     )
             }
     )
-
     public ResponseEntity<?> add(@Valid @RequestBody FlowerDTO dto){
         LOG.info("Controller - Saving method");
         try{
             FlowerDTOReturn dtoReturn = flowerService.save(dto);
             return new ResponseEntity<>(dtoReturn, HttpStatus.OK);
-        }catch (Exception e){
+        }catch (RuntimeException e){
             return new ResponseEntity<>("Not valid Flower",HttpStatus.BAD_REQUEST);
         }
     }
@@ -210,9 +210,6 @@ public class FlowerController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 
 
 
