@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Flow;
 
 @Controller
 @RequestMapping("/flower")
@@ -130,17 +130,13 @@ public class FlowerController {
             }
     )
     public ResponseEntity<?> delete(@PathVariable int id){
-        LOG.info("Controller  Deleting method running");
-        try{
-            Optional<FlowerDTO> optionaldto = flowerService.getOne(id);
-            FlowerDTOReturn flowerDTOReturn = null;
-            if(optionaldto.isPresent()){
-                FlowerDTO dto = optionaldto.get();
-                flowerDTOReturn = new FlowerDTOReturn(dto.getName(), dto.getCountry(),dto.getEurope());
-            }
-            flowerService.delete(id);
-            return new ResponseEntity<>(flowerDTOReturn,HttpStatus.OK);
-        }catch(RuntimeException rse){
+        LOG.info("Controller - Deleting method running");
+
+        FlowerDTOReturn dtoReturn = flowerService.delete(id);
+
+        if(dtoReturn != null){
+            return new ResponseEntity<>(dtoReturn,HttpStatus.OK);
+        }else{
             return ResponseEntity.notFound().build();
         }
     }
@@ -170,17 +166,8 @@ public class FlowerController {
     public ResponseEntity<?> getOne(@PathVariable int id){
             Optional<FlowerDTO> optional = flowerService.getOne(id);
             FlowerDTO dto = optional.orElseThrow(
-                    ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No right Id: '" + id +"'"));
+                    ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No right Id: '" + id +"'")); //HTTP Body Message
             return ResponseEntity.ok().body(dto);
-//            return new ResponseEntity<FlowerDTO>(dto,HttpStatus.OK);
-
-//        try{
-//            Optional<FlowerDTO> optional = flowerService.getOne(id);
-//            FlowerDTO dto = optional.get();
-//            return new ResponseEntity<FlowerDTO>(dto,HttpStatus.OK);
-//        }catch (ResponseStatusException rse){
-//            return new ResponseEntity<>(rse.getStatusCode());
-//        }
     }
 
     @GetMapping("/getAll")
@@ -203,11 +190,13 @@ public class FlowerController {
             }
     )
     public ResponseEntity<List<FlowerDTO>> getAll(){
-        try{
-            List<FlowerDTO> dtoList = flowerService.getAll();
-            return new ResponseEntity<List<FlowerDTO>>(dtoList, HttpStatus.OK) ;
-        }catch (RuntimeException rse){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        List<FlowerDTO> dtoList = flowerService.getAll();
+        if(dtoList.size()>0){
+            return new ResponseEntity<>(dtoList, HttpStatus.OK);
+        }else {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Header - No content", "There is no values yet");
+            return new ResponseEntity<>(headers, HttpStatus.NOT_FOUND);
         }
     }
 

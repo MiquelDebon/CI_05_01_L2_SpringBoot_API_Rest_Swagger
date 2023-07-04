@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,14 +24,13 @@ public class FlowerServiceImp implements IFlowerService{
     private FlowerRepository repository;
     static Logger LOG = LoggerFactory.getLogger(FlowerServiceImp.class);
 
-
     @Override
     public boolean existFlowerById(int id) {
         return repository.existsById(id);
     }
 
     @Override
-    public Optional<FlowerDTO> getOne(int id) throws RuntimeException {
+    public Optional<FlowerDTO> getOne(int id){
         Optional<Flower> optional = repository.findById(id);
         if(optional.isPresent()){
             FlowerDTO dto = DTOfromFlower(optional.get());
@@ -38,30 +38,34 @@ public class FlowerServiceImp implements IFlowerService{
             return Optional.of(dto);
         }else{
             LOG.warn(String.format("Service - Flower '%d' DO NOT exist",id));
-            throw new RuntimeException();
+            return Optional.empty();
         }
     }
 
     @Override
-    public List<FlowerDTO> getAll() throws RuntimeException {
+    public List<FlowerDTO> getAll() {
         if(repository.findAll().size()>0){
+            LOG.warn(String.format("Service - There are Flowers"));
             return repository.findAll().stream()
                     .map(x -> DTOfromFlower(x))
                     .collect(Collectors.toList());
         }else{
             LOG.warn(String.format("Service - There are NO Flowers"));
-            throw new RuntimeException();
+            return new ArrayList<>();
         }
     }
 
     @Override
-    public void delete(int id) throws RuntimeException {
+    public FlowerDTOReturn delete(int id) {
+        FlowerDTOReturn dtoReturn = null;
         if(repository.existsById(id)){
             LOG.info(String.format("Service - Flower '%d' EXIST to Delete",id));
+            dtoReturn = DTOReturnFromFlower(repository.findById(id).get());
             repository.deleteById(id);
+            return dtoReturn;
         }else{
             LOG.warn(String.format("Service - Flower '%d' DO NOT exist",id));
-            throw new RuntimeException();
+            return dtoReturn;
         }
     }
 
@@ -70,7 +74,6 @@ public class FlowerServiceImp implements IFlowerService{
         FlowerDTO flowerDTO = new FlowerDTO(dto.getName(), dto.getCountry());
         Flower flower = flowerFromDTOSave(dto);
         repository.save(flower);
-        //Otherwise throw an exception
         return new FlowerDTOReturn(flowerDTO.getName(), flowerDTO.getCountry(), flowerDTO.getEurope());
     }
 
@@ -78,7 +81,6 @@ public class FlowerServiceImp implements IFlowerService{
     public void update(FlowerDTO dto) {
         Flower flower = flowerFromDTOUpdate(dto);
         repository.save(flower);
-        //Otherwise throw an exception
     }
 
 
@@ -89,10 +91,13 @@ public class FlowerServiceImp implements IFlowerService{
      * @return DTO
      */
 
+    private FlowerDTOReturn DTOReturnFromFlower(Flower flower){
+        FlowerDTO dto = DTOfromFlower(flower);
+        return new FlowerDTOReturn(dto.getName(), dto.getCountry(), dto.getEurope());
+    }
     private FlowerDTO DTOfromFlower(Flower flower){
         return new FlowerDTO(flower.getPk_FlorID() ,flower.getNomFlor(), flower.getPaisFlor());
     }
-
     private Flower flowerFromDTOSave(FlowerDTO dto){
         return new Flower(dto.getName(), dto.getCountry());
     }

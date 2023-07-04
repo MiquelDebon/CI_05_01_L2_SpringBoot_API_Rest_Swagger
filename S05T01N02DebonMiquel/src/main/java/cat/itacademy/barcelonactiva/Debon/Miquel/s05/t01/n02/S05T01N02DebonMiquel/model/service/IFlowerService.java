@@ -9,7 +9,7 @@ public interface IFlowerService {
     boolean existFlowerById(int id);
     Optional<FlowerDTO> getOne(int id);
     List<FlowerDTO> getAll();
-    void delete(int id);
+    FlowerDTOReturn delete(int id);
     FlowerDTOReturn save(FlowerDTO dto);
     void update(FlowerDTO dto);
 
