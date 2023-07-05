@@ -49,4 +49,22 @@ Open API - Swagger
 References:
 - [Swagger - Extended course](https://www.youtube.com/watch?v=0vqgWQIVfMI&t=2538s)
 - [Swagger - Summary course](https://www.youtube.com/watch?v=2o_3hjUPAfQ)
-- [Documnetation](https://www.bezkoder.com/swagger-3-annotations/)
+- [Bezkoder Swaggger Documnetation](https://www.bezkoder.com/swagger-3-annotations/)
+- [Multiple Implementation SpringBoot Injection Conflict](https://www.springcloud.io/post/2022-04/spring-selective-injection/#gsc.tab=0)
+    ```
+    @Resource(name = "demoServiceBeijing")  
+    IDemoService demoService;
+    ```
+- [ResponseStatusException](https://www.baeldung.com/spring-response-status-exception)
+
+    ```
+    @GetMapping("/actor/{id}")
+    public String getActorName(@PathVariable("id") int id) {
+        try {
+            return actorService.getActor(id);
+        } catch (ActorNotFoundException ex) {
+            throw new ResponseStatusException(
+            HttpStatus.NOT_FOUND, "Actor Not Found", ex);
+        }
+    }
+    ```

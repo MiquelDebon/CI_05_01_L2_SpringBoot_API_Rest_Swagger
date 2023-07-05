@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/flower")
 public class FlowerController {
-
-    //TODO Entity Pattern!
-
     @Autowired
     private IFlowerService flowerService;
 
@@ -48,7 +46,6 @@ public class FlowerController {
                     description = "Expected a Flower JSON",
                     content = @Content(schema = @Schema(implementation = FlowerDTO.class))),
 
-            //TODO: NO estoy exponiendo usuarios demasiado?
             responses = {
                     @ApiResponse(
                             responseCode = "200",
