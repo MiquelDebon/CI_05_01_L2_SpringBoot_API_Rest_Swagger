@@ -98,8 +98,8 @@ public class FlowerController {
     public ResponseEntity<?> update(@RequestBody FlowerDTO dto){
         LOG.info("Controller - Updating method");
         try{
-            flowerService.update(dto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            FlowerDTOReturn dtoReturn = flowerService.update(dto);
+            return new ResponseEntity<>(dtoReturn, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Not valid Flower",HttpStatus.BAD_REQUEST);
         }

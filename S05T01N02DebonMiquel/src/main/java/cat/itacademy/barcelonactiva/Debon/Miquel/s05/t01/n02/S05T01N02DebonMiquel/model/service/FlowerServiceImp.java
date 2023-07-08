@@ -78,9 +78,10 @@ public class FlowerServiceImp implements IFlowerService{
     }
 
     @Override
-    public void update(FlowerDTO dto) {
+    public FlowerDTOReturn update(FlowerDTO dto) {
         Flower flower = flowerFromDTOUpdate(dto);
         repository.save(flower);
+        return DTOReturnFromFlower(flower);
     }
 
 
