@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Schema(hidden = true)
-public class FlowerDTOSchemaUpdate {
+public class FlowerDtoSchemaUpdate {
 
     //This class is use as the Scheme for the UPDATE method
 

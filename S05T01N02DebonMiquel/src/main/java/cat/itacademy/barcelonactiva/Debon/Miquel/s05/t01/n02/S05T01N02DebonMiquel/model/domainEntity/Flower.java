@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class Flower {
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name="id", unique = true)
     private int pk_FlorID;
 

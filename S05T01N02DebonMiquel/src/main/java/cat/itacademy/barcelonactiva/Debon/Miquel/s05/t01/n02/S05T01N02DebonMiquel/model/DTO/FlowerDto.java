@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class FlowerDTO {
+public class FlowerDto {
     @Id
     @Schema(hidden = true)
     private int id;
@@ -23,14 +23,14 @@ public class FlowerDTO {
     @Schema(hidden = true)
     private String europe;
 
-    public FlowerDTO( String name, String country){
+    public FlowerDto(String name, String country){
         this.name = name;
         this.country = country;
         this.europe = UECountries.UEcountriesList.stream()
                 .map(String::toLowerCase)
                 .anyMatch(country.toLowerCase()::contains) ? "UE" : "Fora UE";
     }
-    public FlowerDTO(int id, String name, String country){
+    public FlowerDto(int id, String name, String country){
         this.id = id;
         this.name = name;
         this.country = country;

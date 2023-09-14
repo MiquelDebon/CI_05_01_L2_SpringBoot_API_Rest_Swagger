@@ -1,20 +1,20 @@
 package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class FlowerDTOReturn {
+@NoArgsConstructor
+@AllArgsConstructor
+public class FlowerDtoRequest {
+    @NotEmpty(message = "Name is mandatory")
     @Schema(defaultValue = "Rose", description = "Flower's Name")
     private String name;
+
+    @NotEmpty(message = "Country is mandatory")
     @Schema(defaultValue = "Spain", description = "Flower's Country")
     private String country;
-    @Schema(defaultValue = "EU / No EU", description = "Flower is from Europe?")
-    private String europe;
-
-    public FlowerDTOReturn( String name, String country, String europe){
-        this.name = name;
-        this.country = country;
-        this.europe = europe;
-    }
 }

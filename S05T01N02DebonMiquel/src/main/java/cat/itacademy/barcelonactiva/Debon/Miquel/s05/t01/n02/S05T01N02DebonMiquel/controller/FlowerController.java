@@ -1,15 +1,15 @@
 package cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.controller;
 
-import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTO;
-import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTOReturn;
-import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDTOSchemaUpdate;
+import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDto;
+import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDtoRequest;
+import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDtoReturn;
+import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.DTO.FlowerDtoSchemaUpdate;
 import cat.itacademy.barcelonactiva.Debon.Miquel.s05.t01.n02.S05T01N02DebonMiquel.model.service.IFlowerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +18,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/flower")
 public class FlowerController {
     @Autowired
@@ -44,13 +43,13 @@ public class FlowerController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "Expected a Flower JSON",
-                    content = @Content(schema = @Schema(implementation = FlowerDTO.class))),
+                    content = @Content(schema = @Schema(implementation = FlowerDto.class))),
 
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Successful response",
-                            content = @Content(schema = @Schema(implementation = FlowerDTOReturn.class),
+                            content = @Content(schema = @Schema(implementation = FlowerDtoReturn.class),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE)
                     ),
                     @ApiResponse(
@@ -60,10 +59,10 @@ public class FlowerController {
                     )
             }
     )
-    public ResponseEntity<?> add(@Valid @RequestBody FlowerDTO dto){
+    public ResponseEntity<?> add(@Valid @RequestBody FlowerDtoRequest dto){
         LOG.info("Controller - Saving method");
         try{
-            FlowerDTOReturn dtoReturn = flowerService.save(dto);
+            FlowerDtoReturn dtoReturn = flowerService.save(dto);
             return new ResponseEntity<>(dtoReturn, HttpStatus.OK);
         }catch (RuntimeException e){
             return new ResponseEntity<>("Not valid Flower",HttpStatus.BAD_REQUEST);
@@ -78,13 +77,13 @@ public class FlowerController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "Expected a Flower JSON",
-                    content = @Content(schema = @Schema(implementation = FlowerDTOSchemaUpdate.class))
+                    content = @Content(schema = @Schema(implementation = FlowerDtoSchemaUpdate.class))
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Successful updated",
-                            content = @Content(schema = @Schema(implementation = FlowerDTOReturn.class),
+                            content = @Content(schema = @Schema(implementation = FlowerDtoReturn.class),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE)
 
                     ),
@@ -95,10 +94,10 @@ public class FlowerController {
             }
 
     )
-    public ResponseEntity<?> update(@RequestBody FlowerDTO dto){
+    public ResponseEntity<?> update(@RequestBody FlowerDto dto){
         LOG.info("Controller - Updating method");
         try{
-            FlowerDTOReturn dtoReturn = flowerService.update(dto);
+            FlowerDtoReturn dtoReturn = flowerService.update(dto);
             return new ResponseEntity<>(dtoReturn, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Not valid Flower",HttpStatus.BAD_REQUEST);
@@ -116,7 +115,7 @@ public class FlowerController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Successful updated",
-                            content = @Content(schema = @Schema(implementation = FlowerDTOReturn.class),
+                            content = @Content(schema = @Schema(implementation = FlowerDtoReturn.class),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE)
 
                     ),
@@ -129,7 +128,7 @@ public class FlowerController {
     public ResponseEntity<?> delete(@PathVariable int id){
         LOG.info("Controller - Deleting method running");
 
-        FlowerDTOReturn dtoReturn = flowerService.delete(id);
+        FlowerDtoReturn dtoReturn = flowerService.delete(id);
 
         if(dtoReturn != null){
             return new ResponseEntity<>(dtoReturn,HttpStatus.OK);
@@ -150,7 +149,7 @@ public class FlowerController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Successful updated",
-                            content = @Content(schema = @Schema(implementation = FlowerDTOReturn.class),
+                            content = @Content(schema = @Schema(implementation = FlowerDtoReturn.class),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE)
 
                     ),
@@ -161,13 +160,12 @@ public class FlowerController {
             }
     )
     public ResponseEntity<?> getOne(@PathVariable int id){
-            Optional<FlowerDTO> optional = flowerService.getOne(id);
-            FlowerDTO dto = optional.orElseThrow(
+            Optional<FlowerDto> optional = flowerService.getOne(id);
+            FlowerDto dto = optional.orElseThrow(
                     ()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "No right Id: '" + id +"'")); //HTTP Body Message
             return ResponseEntity.ok().body(dto);
     }
 
-    @GetMapping("/getAll")
     @Operation(
             tags = "IT-Academy",
             summary = "Get ALL Flower DTO",
@@ -176,7 +174,7 @@ public class FlowerController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Successful updated",
-                            content = @Content(schema = @Schema(implementation = FlowerDTOReturn.class),
+                            content = @Content(schema = @Schema(implementation = FlowerDtoReturn.class),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE)
 
                     ),
@@ -186,8 +184,9 @@ public class FlowerController {
                     )
             }
     )
-    public ResponseEntity<List<FlowerDTO>> getAll(){
-        List<FlowerDTO> dtoList = flowerService.getAll();
+    @GetMapping("/getAll")
+    public ResponseEntity<List<FlowerDto>> getAll(){
+        List<FlowerDto> dtoList = flowerService.getAll();
         if(dtoList.size()>0){
             return new ResponseEntity<>(dtoList, HttpStatus.OK);
         }else {
@@ -197,6 +196,12 @@ public class FlowerController {
         }
     }
 
+
+    //Just to check in the next exercise with WebClient
+    @GetMapping("/405")
+    public ResponseEntity<?> getError(){
+        return new ResponseEntity<>(HttpStatus.valueOf(405));
+    }
 
 
 
